@@ -11,7 +11,7 @@ RETVAL=0
 
 case "$1" in
 	start)
-		start-stop-daemon -S -b -q -m -p "$PIDFILE" -x "/usr/bin/$DAEMON"
+		start-stop-daemon -S -b -q -m -p "$PIDFILE" -x "/root/start_aawgd.sh"
 		RETVAL=$?
 		;;
 	stop)
