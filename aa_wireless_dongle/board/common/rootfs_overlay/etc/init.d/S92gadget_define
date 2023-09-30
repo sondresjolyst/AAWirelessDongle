@@ -3,21 +3,20 @@
 # Configure USB gadget interfaces
 #
 
-SERIAL_NUMBER="0"
-MANUFACTURER="My Own"
-PRODUCT="AA Wireless Dongle"
+SERIAL_NUMBER="01234567"
+MANUFACTURER="OnePlus"
+PRODUCT="GM1911"
+
+VENDOR_ID="0x22d9"
+PRODUCT_ID="0x2764"
 
 ACCESSORY_GADGET_NAME="accessory"
 DEFAULT_GADGET_NAME="default"
-
 
 RETVAL=0
 
 start() {
 	mountpoint -q /sys/kernel/config || mount -t configfs none /sys/kernel/config
-
-	# Get first available UDC, assume only one is available
-	UDC=$(ls -1 /sys/class/udc/ | head -1)
 
 	# Setup accessory config
 	cd /sys/kernel/config/usb_gadget
@@ -41,36 +40,27 @@ start() {
 	if [ ! -d "$DEFAULT_GADGET_NAME" ]; then
 		mkdir "$DEFAULT_GADGET_NAME"
 		cd "$DEFAULT_GADGET_NAME"
-		echo "0x1D6B" > idVendor
-		echo "0x0105" > idProduct
+		echo "$VENDOR_ID" > idVendor
+		echo "$PRODUCT_ID" > idProduct
 		mkdir strings/0x409
 		echo "$SERIAL_NUMBER" > strings/0x409/serialnumber
 		echo "$MANUFACTURER" > strings/0x409/manufacturer
 		echo "$PRODUCT" > strings/0x409/product
-		mkdir functions/gser.usb0
+		mkdir functions/ffs.mtp
 		mkdir configs/c.1
 		echo 500 > configs/c.1/MaxPower
-		ln -s functions/gser.usb0 configs/c.1
+		ln -s functions/ffs.mtp configs/c.1
 	fi
 
-	# Enable default
-	echo $UDC > "/sys/kernel/config/usb_gadget/$DEFAULT_GADGET_NAME/UDC"
-
-	logger -s -p INFO -t usb_gadget Enabled default usb gadget
+	logger -s -p INFO -t gadget_define USB gadget configuration defined
 }
 
 stop() {
 	cd /sys/kernel/config/usb_gadget
-	echo "" > "$ACCESSORY_GADGET_NAME"/UDC
-	echo "" > "$DEFAULT_GADGET_NAME"/UDC
+	rm -r "$ACCESSORY_GADGET_NAME"
+	rm -r "$DEFAULT_GADGET_NAME"
 
-	logger -s -p INFO -t usb_gadget Disabled usb gadget
-}
-
-restart() {
-	stop
-	sleep 1
-	start
+	logger -s -p INFO -t gadget_define USB gadget configurstion deleted
 }
 
 case "$1" in
@@ -80,11 +70,8 @@ case "$1" in
 	stop)
 		stop
 		;;
-	restart)
-		restart
-		;;
 	*)
-		echo "Usage: $0 {start|stop|restart}"
+		echo "Usage: $0 {start|stop}"
 		;;
 esac
 
