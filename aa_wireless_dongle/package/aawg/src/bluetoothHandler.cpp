@@ -188,7 +188,7 @@ void BluetoothHandler::connect() {
     connectDevice();
 }
 
-void BluetoothHandler::cleanup() {
+void BluetoothHandler::powerOff() {
     if (!m_adapter) {
         return;
     }
