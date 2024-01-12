@@ -11,6 +11,7 @@
 #include <string>
 
 #include "common.h"
+#include "usb.h"
 #include "proxyHandler.h"
 
 ssize_t AAWProxy::readFully(int fd, unsigned char *buffer, size_t nbyte) {
