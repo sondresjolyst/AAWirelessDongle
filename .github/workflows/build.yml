@@ -24,10 +24,22 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Cache buildroot
+    - name: Cache buildroot output
       uses: actions/cache@v2
       with:
         path: ./buildroot/output
+        key: ${{ runner.os }}-build-${{ hashFiles('**/Makefile') }}
+
+    - name: Cache buildroot downloads
+      uses: actions/cache@v2
+      with:
+        path: ./buildroot/dl
+        key: ${{ runner.os }}-dl-${{ hashFiles('**/Makefile') }}
+
+    - name: Cache buildroot build
+      uses: actions/cache@v2
+      with:
+        path: ./buildroot/build
         key: ${{ runner.os }}-build-${{ hashFiles('**/Makefile') }}
 
     - name: Setup config
@@ -35,7 +47,7 @@ jobs:
       working-directory: ./buildroot
 
     - name: Build
-      run: make
+      run: make -j2
       working-directory: ./buildroot
 
     - name: Compress sdcard.img
