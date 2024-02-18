@@ -56,5 +56,5 @@ jobs:
 
     - uses: actions/upload-artifact@v4
       with:
-        name: AAWirelessDongle
+        name: AAWirelessDongle-${{ matrix.defconfig }}
         path: ./buildroot/output/images/${{ matrix.defconfig }}-sdcard.img.xz
