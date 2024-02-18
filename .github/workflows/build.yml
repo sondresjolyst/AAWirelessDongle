@@ -47,7 +47,7 @@ jobs:
       working-directory: ./buildroot
 
     - name: Build
-      run: make -j2
+      run: make -j$(nproc)
       working-directory: ./buildroot
 
     - name: Compress sdcard.img
