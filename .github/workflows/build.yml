@@ -24,13 +24,19 @@ jobs:
       with:
         submodules: recursive
 
+    - name: Print Variables
+      run: |
+        echo Runner OS: ${{ runner.os }}
+        echo Matrix Defconfig: ${{ matrix.defconfig }}
+        echo Hash of Makefile: ${{ hashFiles('**/Makefile') }}
+
     - name: Cache buildroot output
       uses: actions/cache@v3
       with:
         path: ./buildroot/output
         key: ${{ runner.os }}-output-${{ matrix.defconfig }}-${{ hashFiles('**/Makefile') }}
         restore-keys: |
-          ${{ runner.os }}-build-${{ hashFiles('**/Makefile') }}
+          ${{ runner.os }}-output-${{ hashFiles('**/Makefile') }}
 
     - name: Cache buildroot downloads
       uses: actions/cache@v3
