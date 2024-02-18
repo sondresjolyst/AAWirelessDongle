@@ -24,6 +24,12 @@ jobs:
       with:
         submodules: recursive
 
+    - name: Cache buildroot
+      uses: actions/cache@v2
+      with:
+        path: ./buildroot/output
+        key: ${{ runner.os }}-build-${{ hashFiles('**/Makefile') }}
+
     - name: Setup config
       run: make BR2_EXTERNAL=../aa_wireless_dongle/ ${{ matrix.defconfig }}_defconfig
       working-directory: ./buildroot
