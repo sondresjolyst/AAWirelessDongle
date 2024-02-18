@@ -24,37 +24,27 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Print Variables
-      run: |
-        echo Runner OS: ${{ runner.os }}
-        echo Matrix Defconfig: ${{ matrix.defconfig }}
-        echo Hash of Makefile: ${{ hashFiles('**/Makefile') }}
-
     - name: Cache buildroot output
       uses: actions/cache@v3
       with:
         path: ./buildroot/output
-        key: ${{ runner.os }}-output-${{ hashFiles('**/Makefile') }}
+        key: ${{ runner.os }}-build-${{ matrix.defconfig }}-${{ hashFiles('**/Makefile') }}
         restore-keys: |
-          ${{ runner.os }}-output-${{ hashFiles('**/Makefile') }}
+          ${{ runner.os }}-build-${{ hashFiles('**/Makefile') }}
 
     - name: Cache buildroot downloads
       uses: actions/cache@v3
       with:
         path: ./buildroot/dl
-        key: ${{ runner.os }}-dl-${{ hashFiles('**/Makefile') }}
+        key: ${{ runner.os }}-dl-${{ matrix.defconfig }}-${{ hashFiles('**/Makefile') }}
         restore-keys: |
           ${{ runner.os }}-dl-${{ hashFiles('**/Makefile') }}
-
-    - name: Print hash after cache
-      run: | 
-        echo Hash of Makefile: ${{ hashFiles('**/Makefile') }}
 
     - name: Cache buildroot build
       uses: actions/cache@v3
       with:
         path: ./buildroot/build
-        key: ${{ runner.os }}-build-${{ hashFiles('**/Makefile') }}
+        key: ${{ runner.os }}-build-${{ matrix.defconfig }}-${{ hashFiles('**/Makefile') }}
         restore-keys: |
           ${{ runner.os }}-build-${{ hashFiles('**/Makefile') }}
 
