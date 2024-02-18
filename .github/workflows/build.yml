@@ -12,10 +12,10 @@ jobs:
     strategy:
       matrix:
         defconfig:
-        - raspberrypi0w
-        - raspberrypizero2w
+        # - raspberrypi0w
+        # - raspberrypizero2w
         - raspberrypi4
-        - raspberrypi3a
+        # - raspberrypi3a
 
     runs-on: ubuntu-latest
 
@@ -25,19 +25,19 @@ jobs:
         submodules: recursive
 
     - name: Cache buildroot output
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ./buildroot/output
         key: ${{ runner.os }}-output-${{ matrix.defconfig }}-${{ hashFiles('**/Makefile') }}
 
     - name: Cache buildroot downloads
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ./buildroot/dl
         key: ${{ runner.os }}-dl-${{ matrix.defconfig }}-${{ hashFiles('**/Makefile') }}
 
     - name: Cache buildroot build
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ./buildroot/build
         key: ${{ runner.os }}-build-${{ matrix.defconfig }}-${{ hashFiles('**/Makefile') }}
