@@ -28,25 +28,19 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ./buildroot/output
-        key: ${{ runner.os }}-build-${{ matrix.defconfig }}-${{ hashFiles('**/Makefile') }}
-        restore-keys: |
-          ${{ runner.os }}-build-${{ hashFiles('**/Makefile') }}
+        key: ${{ runner.os }}-output-${{ matrix.defconfig }}-${{ hashFiles('**/Makefile') }}
 
     - name: Cache buildroot downloads
       uses: actions/cache@v3
       with:
         path: ./buildroot/dl
         key: ${{ runner.os }}-dl-${{ matrix.defconfig }}-${{ hashFiles('**/Makefile') }}
-        restore-keys: |
-          ${{ runner.os }}-dl-${{ hashFiles('**/Makefile') }}
 
     - name: Cache buildroot build
       uses: actions/cache@v3
       with:
         path: ./buildroot/build
         key: ${{ runner.os }}-build-${{ matrix.defconfig }}-${{ hashFiles('**/Makefile') }}
-        restore-keys: |
-          ${{ runner.os }}-build-${{ hashFiles('**/Makefile') }}
 
     - name: Setup config
       run: make BR2_EXTERNAL=../aa_wireless_dongle/ ${{ matrix.defconfig }}_defconfig
