@@ -20,27 +20,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         submodules: recursive
 
     - name: Cache buildroot output
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ./buildroot/output
-        key: ${{ runner.os }}-build-${{ hashFiles('**/Makefile') }}
+        key: ${{ runner.os }}-build-${{ matrix.defconfig }}-${{ hashFiles('**/Makefile') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ hashFiles('**/Makefile') }}
 
     - name: Cache buildroot downloads
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ./buildroot/dl
-        key: ${{ runner.os }}-dl-${{ hashFiles('**/Makefile') }}
+        key: ${{ runner.os }}-dl-${{ matrix.defconfig }}-${{ hashFiles('**/Makefile') }}
+        restore-keys: |
+          ${{ runner.os }}-dl-${{ hashFiles('**/Makefile') }}
 
     - name: Cache buildroot build
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ./buildroot/build
-        key: ${{ runner.os }}-build-${{ hashFiles('**/Makefile') }}
+        key: ${{ runner.os }}-build-${{ matrix.defconfig }}-${{ hashFiles('**/Makefile') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ hashFiles('**/Makefile') }}
 
     - name: Setup config
       run: make BR2_EXTERNAL=../aa_wireless_dongle/ ${{ matrix.defconfig }}_defconfig
@@ -54,7 +60,7 @@ jobs:
       run: xz -c sdcard.img > ${{ matrix.defconfig }}-sdcard.img.xz
       working-directory: ./buildroot/output/images
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: AAWirelessDongle
         path: ./buildroot/output/images/${{ matrix.defconfig }}-sdcard.img.xz
