@@ -34,7 +34,7 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ./buildroot/output
-        key: ${{ runner.os }}-output-${{ matrix.defconfig }}-${{ hashFiles('**/Makefile') }}
+        key: ${{ runner.os }}-output-${{ hashFiles('**/Makefile') }}
         restore-keys: |
           ${{ runner.os }}-output-${{ hashFiles('**/Makefile') }}
 
