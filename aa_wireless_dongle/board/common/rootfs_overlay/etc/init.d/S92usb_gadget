@@ -4,8 +4,8 @@
 #
 
 SERIAL_NUMBER="0123456"
-MANUFACTURER="My Own"
-PRODUCT="AA Wireless Dongle"
+MANUFACTURER="TumoGroup"
+PRODUCT="AndroidAuto"
 
 ACCESSORY_GADGET_NAME="accessory"
 DEFAULT_GADGET_NAME="default"
