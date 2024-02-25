@@ -87,9 +87,9 @@ void AAWProxy::forward(ProxyDirection direction, std::atomic<bool>& should_exit)
             break;
     }
 
+    Logger::instance()->info("Starting proxy for direction %s --> %s\n", read_name.c_str(), write_name.c_str());
     while (!should_exit) {
         ssize_t len = read_message ? readMessage(read_fd, buffer, buffer_len) : read(read_fd, buffer, buffer_len);
-        Logger::instance()->info("%d bytes read from %s\n", len, read_name.c_str());
         if (len < 0) {
             Logger::instance()->info("Read from %s failed: %s\n", read_name.c_str(), strerror(errno));
             break;
@@ -99,7 +99,6 @@ void AAWProxy::forward(ProxyDirection direction, std::atomic<bool>& should_exit)
         }
 
         ssize_t wlen = write(write_fd, buffer, len);
-        Logger::instance()->info("%d bytes written to %s\n", wlen, write_name.c_str());
         if (wlen < 0) {
             Logger::instance()->info("Write to %s failed: %s\n", write_name.c_str(), strerror(errno));
             break;
@@ -122,7 +121,10 @@ void AAWProxy::handleClient(int server_sock) {
 
     Logger::instance()->info("Tcp server accepted connection\n");
 
-    UsbManager::instance().enableDefaultAndWaitForAccessroy();
+    std::string connect_hook = Config::instance()->getenv("AAWG_CONNECT_HOOK", "");
+    if (connect_hook != "") {
+        std::system((connect_hook + " &").c_str());
+    }
 
     Logger::instance()->info("Opening usb accessory\n");
     if ((m_usb_fd = open("/dev/usb_accessory", O_RDWR)) < 0) {

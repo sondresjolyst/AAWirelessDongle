@@ -155,7 +155,6 @@ void BluetoothHandler::connectDevice() {
 
         try {
             connectProfile(HSP_AG_UUID);
-            Logger::instance()->info("Bluetooth connected to the device\n");
             return;
         } catch (DBus::Error& e) {
             Logger::instance()->info("Failed to connect device at path: %s\n", device_path.c_str());
