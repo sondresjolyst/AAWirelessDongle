@@ -3,9 +3,9 @@
 # Configure USB gadget interfaces
 #
 
-SERIAL_NUMBER="01234567"
-MANUFACTURER="OnePlus"
-PRODUCT="GM1911"
+SERIAL_NUMBER="1234567890"
+MANUFACTURER="Raspberry Pi"
+PRODUCT="Android Auto Wireless"
 
 VENDOR_ID="0x22d9"
 PRODUCT_ID="0x2764"
